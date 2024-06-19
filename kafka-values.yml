@@ -1,0 +1,40 @@
+image:
+  registry: docker.io
+  repository: bitnami/kafka
+  tag: 3.6.1-debian-12-r12
+
+controller:
+  extraEnvVars:
+    - name: KAFKA_OPTS
+      value: "-Djavax.net.debug=ssl"
+
+listeners:
+  client:
+    protocol: SASL_SSL
+    sslClientAuth: "required"
+
+sasl:
+  enabledMechanisms: PLAIN
+  client:
+    users:
+      - kafkaAdmin
+      - kafkaUser
+    passwords:
+      - "adminpassword"
+      - "userpassword"
+
+tls:
+  type: JKS
+  existingSecret: "kafka-jks"
+  jksKeystoreKey: "kafka.keystore.jks"
+  jksTruststoreKey: "kafka.truststore.jks"
+  keystorePassword: "jkspassword"
+  truststorePassword: "jkspassword"
+  keyPassword: "keypassword"
+  endpointIdentificationAlgorithm: ""
+  sslClientAuth: "required"
+
+
+extraConfig: |
+  authorizer.class.name=org.apache.kafka.metadata.authorizer.StandardAuthorizer
+  super.users=User:controller_user;User:inter_broker_user;User:kafkaAdmin

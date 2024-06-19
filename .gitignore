@@ -1,0 +1,4 @@
+certs/
+kafka.truststore.jks
+kafka.keystore.jks
+keystore.p12
